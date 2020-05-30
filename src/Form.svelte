@@ -1,7 +1,9 @@
 <script>
+    import materialStore from './material-store.js';
+
     export let id;
     export let name = "";
-    export let price;
+    export let price = 5;
 
     $: mode = id ? "edit" : "add";
     $: canSubmit = name !== "" && price >= 0;
@@ -11,13 +13,17 @@
             return;
         }
 
-        price = "";
+        if (mode === "add") {
+            materialStore.add(name, price);
+        }
+
+        price = 5;
         name = "";
         id = undefined;
     }
 
     function cancel() {
-        price = "";
+        price = 5;
         name = "";
         id = undefined;
     }
@@ -34,7 +40,7 @@
     }
 </style>
 
-<form on:submi|preventDefault={submit}>
+<form on:submit|preventDefault={submit}>
     <fieldset>
         <label for="nameField">Material</label>
         <input bind:value={name} type="text" placeholder="Wood, Glue, Etc" id="nameField" />  
